@@ -392,6 +392,18 @@ TEST(index_operator_suite, exceptional_test) {
   ASSERT_THROW(matrix(10, 10), std::out_of_range);
 }
 
+TEST(move_operator_suite, true_test) {
+  S21Matrix first_matrix(2, 2);
+  S21Matrix second_matrix(3, 3);
+  first_matrix.FillingMatrix();
+  second_matrix.FillingMatrix();
+  second_matrix = std::move(first_matrix);
+  EXPECT_EQ(first_matrix.GetRows(), 0);
+  EXPECT_EQ(first_matrix.GetCols(), 0);
+  EXPECT_EQ(second_matrix.GetRows(), 2);
+  EXPECT_EQ(second_matrix.GetCols(), 2);
+}
+
 TEST(SumMatrix_operator_suite, true_test) {
   S21Matrix first_matrix(3, 3);
   S21Matrix second_matrix(3, 3);

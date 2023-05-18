@@ -1,5 +1,7 @@
 #include "s21_matrix_oop.h"
 
+// Constructors
+
 S21Matrix::S21Matrix() : rows_(0), cols_(0), matrix_(0) {}
 
 S21Matrix::S21Matrix(int rows, int cols) {
@@ -19,12 +21,11 @@ S21Matrix::S21Matrix(const S21Matrix& other) {
   }
 }
 
-S21Matrix::S21Matrix(S21Matrix&& other)
-    : rows_(other.rows_), cols_(other.cols_), matrix_(other.matrix_) {
-  other.rows_ = 0;
-  other.cols_ = 0;
-  other.matrix_ = 0;
-}
+S21Matrix::S21Matrix(S21Matrix&& other) { MoveMatrix(other); }
+
+S21Matrix::~S21Matrix() { MemoryDeallocating(); }
+
+// Operations
 
 bool S21Matrix::EqMatrix(const S21Matrix& other) {
   bool status_of_equality = false;
@@ -178,6 +179,8 @@ S21Matrix S21Matrix::InverseMatrix() {
   return inversed_matrix;
 }
 
+// Overloadings opertators
+
 S21Matrix S21Matrix::operator+(const S21Matrix& other) {
   S21Matrix new_matrix(*this);
   new_matrix.SumMatrix(other);
@@ -217,6 +220,12 @@ S21Matrix S21Matrix::operator=(const S21Matrix& other) {
   return *this;
 }
 
+S21Matrix S21Matrix::operator=(S21Matrix&& other) {
+  this->MemoryDeallocating();
+  MoveMatrix(other);
+  return *this;
+}
+
 S21Matrix S21Matrix::operator+=(const S21Matrix& other) {
   this->SumMatrix(other);
   return *this;
@@ -244,7 +253,37 @@ double& S21Matrix::operator()(int i, int j) {
   return matrix_[i][j];
 }
 
-S21Matrix::~S21Matrix() { MemoryDeallocating(); }
+// Accessors & mutators
+
+int S21Matrix::GetCols() const { return cols_; }
+
+int S21Matrix::GetRows() const { return rows_; }
+
+void S21Matrix::SetCols(int cols) {
+  if (this->matrix_) {
+    S21Matrix result(rows_, cols);
+    for (int i = 0; i < rows_; ++i) {
+      for (int j = 0; j < cols_ && j < result.cols_; ++j) {
+        result.matrix_[i][j] = matrix_[i][j];
+      }
+    }
+    *this = result;
+  }
+}
+
+void S21Matrix::SetRows(int rows) {
+  if (this->matrix_) {
+    S21Matrix result(rows, cols_);
+    for (int i = 0; i < rows_ && i < result.rows_; ++i) {
+      for (int j = 0; j < cols_; ++j) {
+        result.matrix_[i][j] = matrix_[i][j];
+      }
+    }
+    *this = result;
+  }
+}
+
+// Additional
 
 double** S21Matrix::MemoryAllocating(int rows, int cols) {
   double** allocated_matrix = new double*[rows];
@@ -298,10 +337,6 @@ void S21Matrix::ShortCopy(const S21Matrix& other, int rows, int cols) {
   }
 }
 
-int S21Matrix::GetCols() const { return cols_; }
-
-int S21Matrix::GetRows() const { return rows_; }
-
 void S21Matrix::FillingMatrix() {
   double count = 0;
   for (int i = 0; i < this->GetRows(); ++i) {
@@ -312,26 +347,11 @@ void S21Matrix::FillingMatrix() {
   }
 }
 
-void S21Matrix::SetCols(int cols) {
-  if (this->matrix_) {
-    S21Matrix result(rows_, cols);
-    for (int i = 0; i < rows_; ++i) {
-      for (int j = 0; j < cols_ && j < result.cols_; ++j) {
-        result.matrix_[i][j] = matrix_[i][j];
-      }
-    }
-    *this = result;
-  }
-}
-
-void S21Matrix::SetRows(int rows) {
-  if (this->matrix_) {
-    S21Matrix result(rows, cols_);
-    for (int i = 0; i < rows_ && i < result.rows_; ++i) {
-      for (int j = 0; j < cols_; ++j) {
-        result.matrix_[i][j] = matrix_[i][j];
-      }
-    }
-    *this = result;
-  }
+void S21Matrix::MoveMatrix(S21Matrix& other) {
+  this->rows_ = other.rows_;
+  this->cols_ = other.cols_;
+  this->matrix_ = other.matrix_;
+  other.rows_ = 0;
+  other.cols_ = 0;
+  other.matrix_ = 0;
 }

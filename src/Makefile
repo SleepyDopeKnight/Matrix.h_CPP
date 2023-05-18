@@ -34,12 +34,12 @@ else
 endif
 
 clean:
-	rm *.out
-	rm *.gcda
-	rm *.gcno
-	rm *.a
-	rm *.info
-	rm *.o
+	rm -rf *.out
+	rm -rf *.gcda
+	rm -rf *.gcno
+	rm -rf *.a
+	rm -rf *.info
+	rm -rf *.o
 	rm -rf report
 
 check:
