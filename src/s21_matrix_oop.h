@@ -3,18 +3,6 @@
 #include <iostream>
 
 class S21Matrix {
- private:
-  int rows_;
-  int cols_;
-  double** matrix_;
-  // Additional
-  double** MemoryAllocating(int rows, int cols);
-  void MemoryDeallocating();
-  void CopyMatrix(const S21Matrix& other);
-  bool ExistMatrix() const;
-  bool EqSizeMatrix(const S21Matrix& other) const;
-  void ShortCopy(const S21Matrix& other, int rows, int cols);
-
  public:
   // Constructors
   S21Matrix();
@@ -53,4 +41,16 @@ class S21Matrix {
   // Additional
   void FillingMatrix();
   void MoveMatrix(S21Matrix& other);
+
+ private:
+  int rows_;
+  int cols_;
+  double** matrix_;
+  // Additional
+  double** MemoryAllocating(int rows, int cols);
+  void MemoryDeallocating();
+  void CopyMatrix(const S21Matrix& other);
+  bool ExistMatrix() const;
+  bool EqSizeMatrix(const S21Matrix& other) const;
+  void ShortCopy(const S21Matrix& other, int rows, int cols);
 };
