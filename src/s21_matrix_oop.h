@@ -1,3 +1,6 @@
+#ifndef SRC_S21_MATRIX_OOP_H_
+#define SRC_S21_MATRIX_OOP_H_
+
 #include <cmath>
 #include <cstdlib>
 #include <iostream>
@@ -54,3 +57,5 @@ class S21Matrix {
   bool EqSizeMatrix(const S21Matrix& other) const;
   void ShortCopy(const S21Matrix& other, int rows, int cols);
 };
+
+#endif  // SRC_S21_MATRIX_OOP_H_
